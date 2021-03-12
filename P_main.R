@@ -30,7 +30,13 @@ P <- calculate_P(har_years, har_months, nepal_shp, demHARWTU, create_mapdf = TRU
 
 # # # # # # # # # # # # # # # # # # # #
 # PLOT
+source('~/src/PrecipIndicator/P_plots.R', echo=TRUE)
+# open P_plots.R to edit/make others
 
 # # # # # # # # # # # # # # # # # # # #
-# SAVE P
-folder_destination = "PATH_TO_FOLDER/"
+# SAVE
+save_path = "PATH_TO_FOLDER/"
+P <- calculate_P(har_years, har_months, nepal_shp, demHARWTU, create_mapdf = TRUE,
+                 save_to = save_path)
+# save .shp for later use
+
