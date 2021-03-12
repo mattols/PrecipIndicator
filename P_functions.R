@@ -6,7 +6,7 @@
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # LOAD DATA
-nepal_wtu = raster::shapefile(dem_path)
+nepal_shp = raster::shapefile(dem_path)
 demHARWTU = raster::raster(dem_path)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

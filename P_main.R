@@ -11,7 +11,7 @@
 # DEFINE DATAPATHS
 Hy_path     = "PATH_TO/HAR Precip Yearly"
 Hm_path     = "PATH_TO/HAR Precip Monthly"
-nepal_path  = "PATH_TO/nepal_wtu.shp"
+nepal_path  = "PATH_TO/nepal_shp.shp"
 dem_path    = "PATH_TO/demHARWTU_new.tif"
 #   path to folders containing yearly (Hy) and monthly (Hm) HAR data
 #   shapefile of main Nepal watersheds

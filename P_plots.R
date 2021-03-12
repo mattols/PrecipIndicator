@@ -10,8 +10,8 @@ library(gridExtra)
 
 # 1.) Quick visualization of study region
 plot(demHARWTU,col='cyan',main="Nepal Water Tower Units (WTU) area above 3500m", xlab = "Longitude", ylab = "Latitude", legend=F)
-plot(nepal_wtu,add=T,col=ggplot2::alpha('red',0.3))
-text(nepal_wtu, nepal_wtu$SUB_NAME,cex=0.6)
+plot(nepal_shp,add=T,col=ggplot2::alpha('red',0.3))
+text(nepal_shp, nepal_shp$SUB_NAME,cex=0.6)
 legend("topright",c("Nepal Hydrobasins","WTU Area"),fill=ggplot2::alpha(c('red',"cyan"),0.3))
 
 # 2.) Plot P
