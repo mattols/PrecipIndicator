@@ -29,6 +29,7 @@ har_months <- readHAR(Hm_path,start_year=2004,monthly=TRUE)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # CALCULATE P
 P <- calculate_P(har_years, har_months, nepal_shp, demHARWTU, create_mapdf = TRUE)
+head(P) # see new attributes created for this shapefile (adapted from nepal_shp)
 
 # # # # # # # # # # # # # # # # # # # #
 # PLOT
