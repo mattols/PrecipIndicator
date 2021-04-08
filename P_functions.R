@@ -81,8 +81,8 @@ crop_convert <- function(har_stk, demHARWTU, month=FALSE, mask=TRUE){
   #
   if(month){dt=30.42;hr=730}else{dt=365;hr=8760}
   # convert from mm/hr to km^3/yr and km^3/mo
-  # har_stk <- har_stk * (1e-6) * (10**2) * dt * hr
-  har_stk <- har_stk * (1e-6) * (10**2) * hr
+  # har_stk <- har_stk * (1e-6) * (10**2) * dt * hr # if original data is monthly mean
+  har_stk <- har_stk * (1e-6) * (10**2) * hr        # if original data is monthly sum
   #
   if(mask){Pvar = raster::crop(har_stk,demHARWTU) * demHARWTU}else{Pvar = raster::crop(har_stk,demHARWTU)}
   names(Pvar) = names(har_stk)

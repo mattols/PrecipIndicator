@@ -41,9 +41,20 @@ readPyGEM <- function(ncpath, var_nc = "glac_runoff_monthly", dtemporal = c('yea
   dtidx = as.numeric(dtime)-(as.numeric(dtime[1]) - 1)
   #
   # aggregate data by dt (month or year)
-  aggdata <-aggregate(as.data.frame(myvar), by=list(dtidx), 
-                      FUN=mean, na.rm=TRUE)
-  agg_mat <- t(aggdata[,2:ncol(aggdata)])
+  if (dtemporal=='year'){
+    # if year, sum all months in each year
+    aggdata <-aggregate(as.data.frame(myvar), by=list(dtidx), 
+                        FUN=sum, na.rm=TRUE);dt = 365
+    
+  }else{ # average of all months
+    aggdata <-aggregate(as.data.frame(myvar), by=list(dtidx), 
+                        FUN=mean, na.rm=TRUE);dt = 30.42
+  }
+  # conversion m^3/month (month) m^3/year (year) -> km^3/time
+  # two ways to do this:
+  # agg_conv = aggdata * 1e-9 * dt # if original data is monthly mean
+  agg_conv = aggdata * 1e-9        # if original data is monthly sum
+  agg_mat <- t(agg_conv[,2:ncol(agg_conv)])
   colnames(agg_mat) <- paste0("dt_",unique(dtime))
   df_dt = data.frame(RGIId = rgiid, lon, lat, agg_mat)
   # 
