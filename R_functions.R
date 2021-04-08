@@ -74,7 +74,7 @@ readPyGEM <- function(ncpath, var_nc = "glac_runoff_monthly", dtemporal = c('yea
 
 ##############################################################################
 # Function 2
-calculate_R <- function(Ryear, Rmonth, nepal_shp, create_mapdf=TRUE, save_to=NULL){
+calculate_R <- function(Ryear, Rmonth, nepal_shp, P, create_mapdf=TRUE, save_to=NULL){
   #
   ## RYV - inter-annual variability in glacier runoff
   # uses max/min of basin-wide average runoff
@@ -91,7 +91,7 @@ calculate_R <- function(Ryear, Rmonth, nepal_shp, create_mapdf=TRUE, save_to=NUL
   ## Calculate RT
   # average annual WTU glacier runoff sum divided by average annual WTU precipitation sum
   RWTU = apply(over(nepal_shp, Ryear[,grep("dt",names(Ryear))], fn = sum), 1, sum)
-  PWTU = apply(over(nepal_shp, Ryear[,grep("dt",names(Ryear))], fn = sum), 1, sum)
+  PWTU = P$PWTU 
   nepal_shp@data <- data.frame(nepal_shp@data, RT = RWTU/PWTU)
   #
   # FINAL R
