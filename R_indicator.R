@@ -23,8 +23,9 @@ head(Ryear)
 # monthly averaged
 Rmonth = readPyGEM(ncpath,dtemporal='month',ROI=nepal_shp)
 
-# calculate runoff indicator
-R <- calculate_R(Ryear,Rmonth,nepal_shp)
+# calculate R - runoff indicator
+# calculate P first!
+R <- calculate_R(Ryear,Rmonth,nepal_shp, P)
 # you need to think about how to calculate RT
 #   right now the value is 1 for each watershed, see below
 
