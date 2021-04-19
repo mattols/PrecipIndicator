@@ -1,0 +1,91 @@
+# Calculating the Glacier Ice Storage (G)
+# The dataset is from ICIMOD (2011)
+
+setwd("N:/Water Budget Index/Water Supply Index")
+
+# Loading the necessary libraries
+library(sp)
+library(sf)
+library(rgdal)
+library(ggplot2)
+library(gridExtra)
+library(raster)
+library(plyr)
+library(rgeos)
+
+# Loading the necessary datasets
+
+npl_glaciers = raster::shapefile("N:/Water Budget Index/Water Supply Index/Glacier_Shapefiles/Glacier_Shapefiles/Nepal_gr_2010.shp")
+plot(npl_glaciers)
+npl_glaciers_prj <- spTransform(npl_glaciers, CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+
+
+npl_hydrobasins = raster::shapefile("N:/Water Budget Index/Water Supply Index/Nepal_shp/nepal_wtu.shp")
+plot(npl_hydrobasins)
+plot(npl_glaciers_prj, axes=T, add = T)
+
+nepal_wtu_3000 = shapefile("N:/Water Budget Index/Water Supply Index/WTU Delineation/WTU_3000_final.shp")
+plot(nepal_wtu_3000)
+
+# Explore the glacier dataset
+names(npl_glaciers_prj)
+
+# Calculate the total glacier ice storage (GV)
+
+npl_GV = over(npl_hydrobasins, npl_glaciers_prj[,17], fun = sum, na.rm = T)
+npl_GV
+
+# Plotting the GV
+
+npl_hydrobasins@data <- data.frame(npl_hydrobasins@data, final_gv = npl_GV[,1])
+
+# Plot the results
+mapa <- npl_hydrobasins
+mapa@data$id <- rownames(mapa@data)
+mapa.df     <- fortify(mapa)
+mapa.df     <- join(mapa.df,mapa@data, by="id")
+
+
+# Plotting the total volume of water stored in the lakes and reservoirs for each WTU 
+# within the hydro basin
+ggplot(mapa.df, aes(x=long, y=lat, group=group)) +
+  #geom_polygon(data = nepal_wtu_prj, aes(x = long, y = lat, group = group, col=blues9), colour = "cyan") +
+  geom_polygon(aes(fill= final_gv, col=blues9),colour = "blue") +
+  ggtitle("Total glacier ice storage (volume) for WTU within each hydrobasin (GV)") +
+  xlab("Latitude") + ylab("Longitude") + theme_classic() +
+  scale_fill_continuous(name=bquote("km"^3)) +
+  coord_fixed()
+
+# Calculating the glacier ice storage 
+
+PWTU = calc(Py, fun = sum)
+PWTUFIN = extract(PWTU, npl_hydrobasins, fun=sum, na.rm=TRUE)
+PWTUFIN
+
+npl_G = npl_GV / (npl_GV + PWTUFIN)
+npl_G
+
+
+# Plotting the Glacier ice Storage 
+
+npl_hydrobasins@data <- data.frame(npl_hydrobasins@data, final_g = npl_G[,1])
+
+# Plot the results
+mapa <- npl_hydrobasins
+mapa@data$id <- rownames(mapa@data)
+mapa.df     <- fortify(mapa)
+mapa.df     <- join(mapa.df,mapa@data, by="id")
+
+# Plotting the total volume of water stored in the lakes and reservoirs for each WTU 
+# within the hydro basin
+ggplot(mapa.df, aes(x=long, y=lat, group=group)) +
+  #geom_polygon(data = npl_hydrobasins, aes(x = long, y = lat, group = group, col=blues9), colour = "cyan") +
+  geom_polygon(aes(fill= final_g, col=blues9),colour = "blue") +
+  ggtitle("Final Glacier Ice Storage Indicator (G)") +
+  xlab("Latitude") + ylab("Longitude") + theme_classic() +
+  scale_fill_continuous(name="G Indicator") +
+  coord_fixed()
+
+# Aggregating R and npl_G to indicator G 
+
+G = (R + npl_G)/2
